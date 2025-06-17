@@ -3,256 +3,157 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一个来自B哥的秘密</title>
+    <title>一份来自庄孕B的自白</title>
     <style>
-        /* --- Google字体，用于特殊字体 --- */
-        @import url('https://fonts.googleapis.com/css2?family=Special+Elite&family=Noto+Sans+SC:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
 
-        /* --- 全局和背景样式 --- */
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
-            height: 100%;
-            overflow: hidden;
-            font-family: 'Noto Sans SC', sans-serif; /* 使用更适合中文的字体 */
-            background: #1a1a1a;
-            color: #fff;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            text-align: center;
+            font-family: 'Noto Sans SC', sans-serif;
+            background-color: #121212;
+            color: #e0e0e0;
         }
 
-        /* --- 开场动画文字样式 --- */
-        .intro-text {
-            font-size: 3em;
-            font-weight: 300;
-            letter-spacing: 2px;
+        .container {
+            max-width: 800px;
+            margin: 50px auto;
+            padding: 40px;
+            background-color: #1e1e1e;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
             opacity: 0;
-            animation: fadeIn 3s forwards;
+            animation: fadeIn 1s forwards;
         }
 
         @keyframes fadeIn {
-            to {
-                opacity: 1;
-            }
-        }
-        
-        /* --- 弹窗样式 (不变) --- */
-        .modal-backdrop {
-            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
-            background: rgba(0, 0, 0, 0.7); backdrop-filter: blur(8px);
-            display: none; justify-content: center; align-items: center;
-            opacity: 0; transition: opacity 0.5s ease;
-        }
-        .modal-content {
-            padding: 40px; background: #2c2c2c; border-radius: 20px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            transform: scale(0.9); transition: transform 0.5s ease;
-        }
-        .modal-content h2 { margin-top: 0; font-size: 2.5em; font-weight: 600; }
-        .modal-content p { font-size: 1.5em; margin-bottom: 40px; }
-        .button-container { display: flex; justify-content: center; gap: 20px; }
-        .btn {
-            padding: 15px 30px; border: none; border-radius: 10px;
-            font-size: 1.2em; font-weight: bold; cursor: pointer;
-            transition: all 0.3s ease; min-width: 150px;
-        }
-        #acceptBtn { background-color: #4CAF50; color: white; }
-        #acceptBtn:hover { background-color: #5cb85c; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4); }
-        #rejectBtn { background-color: #f44336; color: white; }
-        #rejectBtn:hover { background-color: #d9534f; transform: translateY(-3px); box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4); }
-        
-        /* --- 新增：案件档案区样式 --- */
-        #confessionSection {
-            display: none; /* 默认隐藏 */
-            background: #fdfaf4; /* 泛黄的纸张颜色 */
-            color: #333;
-            padding: 40px;
-            border-radius: 5px;
-            border: 1px solid #dcd3c3;
-            max-width: 800px;
-            text-align: left;
-            box-shadow: 0 0 20px rgba(0,0,0,0.5);
-            height: 80vh; /* 占据屏幕大部分高度 */
-            overflow-y: auto; /* 内容过多时可以滚动 */
+            to { opacity: 1; }
         }
 
-        .case-file-header {
+        h1 {
             text-align: center;
-            border-bottom: 2px double #333;
-            padding-bottom: 10px;
+            color: #bb86fc;
+            font-size: 2.5em;
+            margin-bottom: 30px;
+        }
+
+        .confession-text {
+            font-size: 1.2em;
+            line-height: 1.8;
+            text-indent: 2em; /* 首行缩进 */
+            margin-bottom: 30px;
+        }
+
+        .evidence {
+            text-align: center;
+        }
+
+        .evidence h2 {
+            font-size: 1.5em;
+            color: #f44336;
             margin-bottom: 20px;
         }
-        .case-file-header h1 {
-            font-family: 'Special Elite', cursive; /* 打字机字体 */
-            font-size: 2.5em;
-            margin: 0;
-        }
-        .top-secret-stamp {
-            font-size: 1.5em;
-            color: #d9534f;
-            border: 3px solid #d9534f;
-            padding: 5px 10px;
-            display: inline-block;
-            transform: rotate(-10deg);
-            font-weight: bold;
-            margin-bottom: 15px;
-            font-family: 'Special Elite', cursive;
+
+        .evidence img {
+            max-width: 100%;
+            border-radius: 10px;
+            border: 3px solid #f44336;
         }
 
-        .case-info {
-            border: 1px solid #ccc;
-            padding: 15px;
-            margin-bottom: 30px;
-            background: #f5f1e8;
-        }
-        .case-info p { margin: 5px 0; }
-        .case-info span { font-weight: bold; }
-
-        .exhibit-section h2, .interrogation-log h2, .verdict-section h2 {
-            font-family: 'Special Elite', cursive;
-            border-bottom: 1px solid #333;
-            padding-bottom: 5px;
-            margin-top: 40px;
-        }
-
-        .exhibit-image-container {
-            border: 2px dashed #d9534f;
-            padding: 10px;
-            margin: 20px auto;
-            text-align: center;
-        }
-        .exhibit-image-container img {
+        /* --- 弹窗样式 --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
             width: 100%;
-            max-width: 600px;
-        }
-        .exhibit-image-container p {
-            font-weight: bold;
-            color: #d9534f;
-            margin-top: 10px;
-        }
-
-        .interrogation-log p {
-            font-family: 'Special Elite', cursive;
-            line-height: 1.8;
-            font-size: 1.1em;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7);
+            backdrop-filter: blur(8px);
+            display: none; /* 默认隐藏 */
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+            opacity: 0;
+            transition: opacity 0.5s ease;
         }
 
-        .verdict-section ul {
-            list-style-type: decimal;
-            padding-left: 20px;
+        .modal-content {
+            padding: 40px;
+            background: #2c2c2c;
+            border-radius: 20px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.5s ease;
         }
-        .verdict-section li {
-            margin-bottom: 10px;
+
+        .modal-content h2 {
+            font-size: 1.8em;
+            margin: 0 0 25px 0;
+            color: #03dac6;
         }
-        .final-stamp {
-            text-align: right;
-            margin-top: 50px;
-        }
-        .final-stamp p {
-            font-family: 'Special Elite', cursive;
+
+        .modal-button {
+            padding: 15px 40px;
+            border: none;
+            border-radius: 10px;
             font-size: 1.2em;
-            color: #d9534f;
-            border: 2px solid #d9534f;
-            padding: 15px;
-            display: inline-block;
             font-weight: bold;
+            cursor: pointer;
+            background-color: #bb86fc;
+            color: #121212;
+            transition: all 0.3s ease;
         }
-
+        .modal-button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px rgba(187, 134, 252, 0.5);
+        }
     </style>
 </head>
 <body>
 
-    <!-- 开场文字 (不变) -->
-    <div id="introSection">
-        <h1 class="intro-text">有些事... 是时候说清楚了。</h1>
+    <div class="container">
+        <h1>庄孕B的忏悔录</h1>
+        <p class="confession-text">
+            我，庄孕B，在此忏悔。我承认，上次剧本杀我当恐怖分子杀了大家，破坏了所有人的游戏体验。我没有一丝怜悯，我甚至还想笑。这是我内心阴暗面的体现，我对不起大家，对不起我的好兄弟们。
+        </p>
+        <div class="evidence">
+            <h2>现场铁证</h2>
+            <img src="【请在这里粘贴你的图片链接】" alt="作案现场照片">
+        </div>
     </div>
 
-    <!-- 弹窗 (不变) -->
-    <div id="modal" class="modal-backdrop">
+    <!-- 弹窗HTML -->
+    <div id="surprise-modal" class="modal-backdrop">
         <div class="modal-content">
-            <h2>一个重要的决定</h2>
-            <p>你，是否愿意接受B哥的忏悔？</p>
-            <div class="button-container">
-                <button id="acceptBtn" class="btn">欣然接受</button>
-                <button id="rejectBtn" class="btn">我偏不</button>
-            </div>
+            <h2>想看更多庄孕B的精彩画面吗？</h2>
+            <button id="surprise-button" class="modal-button">立即查看</button>
         </div>
     </div>
-
-    <!-- 全新设计的"案件档案"内容区 -->
-    <div id="confessionSection">
-        <div class="case-file-header">
-            <div class="top-secret-stamp">阅后即焚</div>
-            <h1>绝密案件档案</h1>
-        </div>
-
-        <div class="case-info">
-            <p><span>案件编号:</span> Case-001</p>
-            <p><span>嫌疑人代号:</span> B哥 (Mr. B)</p>
-            <p><span>罪名:</span> 一级游戏谋杀罪 & 反社会人格娱乐行为</p>
-            <p><span>危险等级:</span> ★★★★★ (极度危险，建议隔离)</p>
-        </div>
-
-        <div class="exhibit-section">
-            <h2>证物 A (Exhibit A)</h2>
-            <div class="exhibit-image-container">
-                <img src="b04fca0bc4136f4bff55895223c66bc.jpg" alt="剧本杀现场铁证">
-                <p>关键证据：嫌疑人作案后露出的冷酷笑容</p>
-            </div>
-        </div>
-
-        <div class="interrogation-log">
-            <h2>嫌疑人口供记录</h2>
-            <p>记录员: [你的名字]</p>
-            <p>记录时间: [2025-06-17]</p>
-            <br>
-            <p>"我，B哥，在此忏悔。我承认，上次剧本杀我当恐怖分子杀了大家，破坏了所有人的游戏体验。我没有一丝怜悯，我甚至还想笑。"</p>
-        </div>
-
-        <div class="verdict-section">
-            <h2>心理评估与处理意见</h2>
-            <p>经专家组评估，嫌疑人B哥毫无悔改之意，甚至引以为傲，社会危害性极大。为维护正义与和平，现做出以下判决：</p>
-            <ul>
-                <li>没收作案工具（他的手机/电脑）24小时。</li>
-                <li>责令其立刻向受害人代表 [你的名字] 赔罪，方式包括但不限于请客吃饭、买奶茶等。</li>
-                <li>本档案将永久存档，作为其一生的污点。</li>
-            </ul>
-        </div>
-        
-        <div class="final-stamp">
-            <p>正义执行委员会</p>
-        </div>
-    </div>
-
 
     <script>
-        // JS逻辑保持不变
-        const introSection = document.getElementById('introSection');
-        const modal = document.getElementById('modal');
-        const modalContent = document.querySelector('.modal-content');
-        const acceptBtn = document.getElementById('acceptBtn');
-        const rejectBtn = document.getElementById('rejectBtn');
-        const confessionSection = document.getElementById('confessionSection');
+        // 获取弹窗元素
+        const modal = document.getElementById('surprise-modal');
+        const surpriseButton = document.getElementById('surprise-button');
 
+        // 经典的恶搞视频链接 (Rickroll)
+        const prankVideoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+
+        // 页面加载7秒后，显示弹窗
         setTimeout(() => {
             modal.style.display = 'flex';
+            // 短暂延迟后增加动画效果，使其平滑浮现
             setTimeout(() => {
                 modal.style.opacity = '1';
-                modalContent.style.transform = 'scale(1)';
+                modal.querySelector('.modal-content').style.transform = 'scale(1)';
             }, 50);
-        }, 3000);
+        }, 7000); // 7000毫秒 = 7秒
 
-        acceptBtn.addEventListener('click', () => {
-            introSection.style.display = 'none';
-            modal.style.display = 'none';
-            confessionSection.style.display = 'block';
-        });
-
-        rejectBtn.addEventListener('click', () => {
-            alert('你他妈必须接受');
+        // 为按钮添加点击事件
+        surpriseButton.addEventListener('click', () => {
+            // 在新标签页中打开视频链接
+            window.location.href = prankVideoUrl;
         });
     </script>
 
