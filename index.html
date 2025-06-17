@@ -3,159 +3,289 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>一份来自庄孕B的自白</title>
+    <title>庄孕B的宿命审判</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;700&display=swap');
+
+        :root {
+            /* 明亮清新的色调 */
+            --bg-color: #f4f7f9;
+            --panel-color: #ffffff;
+            --text-color: #333333;
+            --title-color: #000000;
+            --primary-color: #007bff; /* 友好蓝 */
+            --secondary-color: #ff7f50; /* 珊瑚橙 */
+            --ai-button-color: #28a745; /* AI 绿色 */
+            --border-color: #e0e0e0;
+            --shadow-color: rgba(0, 0, 0, 0.1);
+        }
 
         body, html {
             margin: 0;
             padding: 0;
             width: 100%;
+            height: 100%;
+            background-color: var(--bg-color);
+            color: var(--text-color);
             font-family: 'Noto Sans SC', sans-serif;
-            background-color: #121212;
-            color: #e0e0e0;
+            overflow: hidden;
+            display: flex;
+            justify-content: center;
+            align-items: center;
         }
 
-        .container {
+        /* --- 主内容区域 --- */
+        #main-content {
+            display: none;
             max-width: 800px;
-            margin: 50px auto;
+            width: 90%;
+            margin: 0 auto;
             padding: 40px;
-            background-color: #1e1e1e;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
-            opacity: 0;
+            background-color: var(--panel-color);
+            border-radius: 20px;
+            box-shadow: 0 10px 40px var(--shadow-color);
+            border: 1px solid var(--border-color);
+            z-index: 10;
+            max-height: 90vh;
+            overflow-y: auto;
             animation: fadeIn 1s forwards;
-        }
-
-        @keyframes fadeIn {
-            to { opacity: 1; }
         }
 
         h1 {
             text-align: center;
-            color: #bb86fc;
+            color: var(--title-color);
             font-size: 2.5em;
             margin-bottom: 30px;
         }
-
         .confession-text {
             font-size: 1.2em;
             line-height: 1.8;
-            text-indent: 2em; /* 首行缩进 */
             margin-bottom: 30px;
         }
-
-        .evidence {
-            text-align: center;
-        }
-
-        .evidence h2 {
-            font-size: 1.5em;
-            color: #f44336;
-            margin-bottom: 20px;
-        }
-
-        .evidence img {
-            max-width: 100%;
-            border-radius: 10px;
-            border: 3px solid #f44336;
-        }
+        .evidence { text-align: center; }
+        .evidence h2 { font-size: 1.5em; color: var(--secondary-color); margin-bottom: 20px; }
+        .evidence img { max-width: 100%; border-radius: 10px; border: 1px solid var(--border-color); }
 
         /* --- 弹窗样式 --- */
         .modal-backdrop {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background: rgba(0, 0, 0, 0.7);
+            position: fixed; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0, 0, 0, 0.4);
             backdrop-filter: blur(8px);
-            display: none; /* 默认隐藏 */
-            justify-content: center;
-            align-items: center;
+            display: flex; justify-content: center; align-items: center;
             z-index: 1000;
             opacity: 0;
             transition: opacity 0.5s ease;
+            pointer-events: none;
         }
+        .modal-backdrop.visible { opacity: 1; pointer-events: auto; }
 
         .modal-content {
             padding: 40px;
-            background: #2c2c2c;
+            background: var(--panel-color);
             border-radius: 20px;
             text-align: center;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 5px 30px var(--shadow-color);
+            border: 1px solid var(--border-color);
             transform: scale(0.9);
-            transition: transform 0.5s ease;
+            transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            width: 90%;
+            max-width: 500px;
+            box-sizing: border-box;
         }
-
-        .modal-content h2 {
-            font-size: 1.8em;
-            margin: 0 0 25px 0;
-            color: #03dac6;
-        }
-
-        .modal-button {
-            padding: 15px 40px;
-            border: none;
-            border-radius: 10px;
-            font-size: 1.2em;
-            font-weight: bold;
-            cursor: pointer;
-            background-color: #bb86fc;
-            color: #121212;
+        .modal-backdrop.visible .modal-content { transform: scale(1); }
+        .modal-content h2 { font-size: 1.8em; margin: 0 0 30px 0; color: var(--title-color); }
+        .button-container { display: flex; justify-content: center; gap: 20px; position: relative; min-height: 55px; align-items: center; }
+        
+        .btn {
+            padding: 15px 30px; border: none; border-radius: 10px;
+            font-size: 1.2em; font-weight: bold; cursor: pointer;
+            color: white;
             transition: all 0.3s ease;
+            min-width: 150px;
         }
-        .modal-button:hover {
-            transform: scale(1.05);
-            box-shadow: 0 0 20px rgba(187, 134, 252, 0.5);
+        #accept-btn { background-color: var(--primary-color); }
+        #accept-btn:hover { filter: brightness(1.1); transform: translateY(-3px); }
+        
+        #reject-btn { 
+            background-color: var(--secondary-color); 
+            position: absolute;
+            transition: top 0.2s ease-out, left 0.2s ease-out;
         }
+        
+        @keyframes fadeIn { to { opacity: 1; } }
+
+        /* --- AI 功能区样式 (新) --- */
+        #ai-analysis-section {
+            margin-top: 40px;
+            padding-top: 30px;
+            border-top: 1px solid var(--border-color);
+            text-align: center;
+        }
+        #ai-analyze-btn {
+            background-color: var(--ai-button-color);
+            font-size: 1.2em;
+        }
+        #final-confession-container {
+            margin-top: 20px;
+        }
+        #final-confession-text {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: var(--title-color);
+            margin-bottom: 15px;
+        }
+        #ai-crime {
+            color: var(--secondary-color);
+        }
+        .progress-bar-container {
+            width: 100%;
+            height: 30px;
+            background-color: #e9ecef;
+            border-radius: 15px;
+            overflow: hidden;
+            border: 1px solid var(--border-color);
+        }
+        .progress-bar-fill {
+            width: 0%;
+            height: 100%;
+            background: linear-gradient(45deg, var(--ai-button-color), #58d68d);
+            transition: width 0.1s linear;
+            border-radius: 15px;
+        }
+        #progress-text {
+            margin-top: 10px;
+            font-weight: bold;
+        }
+
     </style>
 </head>
 <body>
 
-    <div class="container">
+    <!-- 主内容区域 -->
+    <div id="main-content">
         <h1>庄孕B的忏悔录</h1>
-        <p class="confession-text">
-            我，庄孕B，在此忏悔。我承认，上次剧本杀我当恐怖分子杀了大家，破坏了所有人的游戏体验。我没有一丝怜悯，我甚至还想笑。这是我内心阴暗面的体现，我对不起大家，对不起我的好兄弟们。
-        </p>
+        <p class="confession-text">我，庄孕B，在此忏悔。我承认，上次剧本杀我当恐怖分子杀了大家，破坏了所有人的游戏体验。我没有一丝怜悯，我甚至还想笑。这是我内心阴暗面的体现，我对不起大家，对不起我的好兄弟们。</p>
         <div class="evidence">
             <h2>现场铁证</h2>
-            <img src="b04fca0bc4136f4bff55895223c66bc.jpg" alt="作案现场照片">
+            <img src="【请在这里粘贴你的图片链接】" alt="作案现场照片">
+        </div>
+        
+        <!-- AI 功能区 -->
+        <div id="ai-analysis-section">
+            <button id="ai-analyze-btn" class="btn">✨ AI揭露终极罪行</button>
+            <div id="final-confession-container" style="display: none;">
+                <p id="final-confession-text">我是庄孕B，我曾经干过（<span id="ai-crime">正在深度挖掘黑历史...</span>）</p>
+                <div class="progress-bar-container">
+                    <div id="progress-bar" class="progress-bar-fill"></div>
+                </div>
+                <p id="progress-text">系统分析中... 0%</p>
+            </div>
         </div>
     </div>
 
-    <!-- 弹窗HTML -->
-    <div id="surprise-modal" class="modal-backdrop">
+    <!-- 第一个弹窗：选择 -->
+    <div id="choice-modal" class="modal-backdrop">
         <div class="modal-content">
-            <h2>想看更多庄孕B的精彩画面吗？</h2>
-            <button id="surprise-button" class="modal-button">立即查看</button>
+            <h2>是否接受庄孕B的忏悔？</h2>
+            <div class="button-container">
+                <button id="accept-btn" class="btn">欣然接受</button>
+                <button id="reject-btn" class="btn">我偏不</button>
+            </div>
         </div>
     </div>
 
     <script>
-        // 获取弹窗元素
-        const modal = document.getElementById('surprise-modal');
-        const surpriseButton = document.getElementById('surprise-button');
+        // --- 元素获取 ---
+        const choiceModal = document.getElementById('choice-modal');
+        const mainContent = document.getElementById('main-content');
+        const acceptBtn = document.getElementById('accept-btn');
+        const rejectBtn = document.getElementById('reject-btn');
+        const aiAnalyzeBtn = document.getElementById('ai-analyze-btn');
+        const finalConfessionContainer = document.getElementById('final-confession-container');
+        const aiCrimeSpan = document.getElementById('ai-crime');
+        const progressBar = document.getElementById('progress-bar');
+        const progressText = document.getElementById('progress-text');
 
-        // 经典的恶搞视频链接 (Rickroll)
-        const prankVideoUrl = 'https://www.youtube.com/watch?v=dQw4w9WgXcQ';
+        // --- Bilibili Rickroll 链接 ---
+        const prankVideoUrl = 'https://www.bilibili.com/video/BV1GJ411x7h7/';
 
-        // 页面加载7秒后，显示弹窗
-        setTimeout(() => {
-            modal.style.display = 'flex';
-            // 短暂延迟后增加动画效果，使其平滑浮现
-            setTimeout(() => {
-                modal.style.opacity = '1';
-                modal.querySelector('.modal-content').style.transform = 'scale(1)';
-            }, 50);
-        }, 7000); // 7000毫秒 = 7秒
+        // --- 主流程 ---
+        window.onload = () => {
+            choiceModal.classList.add('visible');
+            // 将拒绝按钮放置在接受按钮旁边
+            const acceptRect = acceptBtn.getBoundingClientRect();
+            const containerRect = acceptBtn.parentElement.getBoundingClientRect();
+            rejectBtn.style.left = `${acceptRect.left - containerRect.left + acceptRect.width + 20}px`;
+        };
 
-        // 为按钮添加点击事件
-        surpriseButton.addEventListener('click', () => {
-            // 在新标签页中打开视频链接
-            window.location.href = prankVideoUrl;
+        acceptBtn.addEventListener('click', () => {
+            choiceModal.classList.remove('visible');
+            mainContent.style.display = 'block';
+        });
+
+        // 拒绝按钮闪躲逻辑
+        rejectBtn.addEventListener('mouseover', () => {
+            const modalContent = rejectBtn.closest('.modal-content');
+            const contentRect = modalContent.getBoundingClientRect();
+            const newTop = Math.random() * (contentRect.height * 0.8 - rejectBtn.offsetHeight);
+            const newLeft = Math.random() * (contentRect.width * 0.8 - rejectBtn.offsetWidth);
+            
+            rejectBtn.style.position = 'absolute';
+            rejectBtn.style.top = `${newTop}px`;
+            rejectBtn.style.left = `${newLeft}px`;
+        });
+
+        // --- Gemini AI 功能逻辑 ---
+        aiAnalyzeBtn.addEventListener('click', async () => {
+            aiAnalyzeBtn.style.display = 'none'; // 隐藏按钮
+            finalConfessionContainer.style.display = 'block'; // 显示进度条部分
+
+            // 并行启动进度条和API请求
+            // 1. 启动进度条
+            let progress = 0;
+            const duration = 5000; // 5秒
+            const intervalTime = 50;
+            const interval = setInterval(() => {
+                progress += (intervalTime / duration) * 100;
+                if (progress >= 100) {
+                    progress = 100;
+                    clearInterval(interval);
+                    // 进度条满后1秒跳转
+                    setTimeout(() => {
+                        window.location.href = prankVideoUrl;
+                    }, 1000);
+                }
+                progressBar.style.width = `${progress}%`;
+                progressText.textContent = `系统分析中... ${Math.round(progress)}%`;
+            }, intervalTime);
+
+            // 2. 请求AI
+            const prompt = '请生成一个简短的、荒谬的、伪造的中国历史罪行，格式为一句话，例如“给八国联军带路”或“建议秦始皇用焚书的木炭烤串”。只要那句罪行，不要任何多余的文字。';
+            
+            try {
+                const apiKey = "";
+                const apiUrl = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.0-flash:generateContent?key=${apiKey}`;
+                const payload = { contents: [{ role: "user", parts: [{ text: prompt }] }] };
+                
+                const response = await fetch(apiUrl, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(payload)
+                });
+
+                if (!response.ok) throw new Error('API request failed');
+
+                const result = await response.json();
+                const text = result.candidates[0].content.parts[0].text.trim().replace(/["“”。]/g, '');
+                
+                aiCrimeSpan.textContent = text; // 更新罪行文本
+
+            } catch (error) {
+                console.error('Gemini API Error:', error);
+                // 如果API失败，使用一个备用罪行，不影响流程
+                aiCrimeSpan.textContent = '篡改历史教科书把自己的照片换了上去';
+            }
         });
     </script>
-
 </body>
 </html>
