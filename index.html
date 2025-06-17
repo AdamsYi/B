@@ -157,22 +157,6 @@
             font-weight: bold;
         }
 
-        /* 全屏视频播放器样式 */
-        #video-player-container {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-color: #000;
-            z-index: 9999;
-            display: none; /* 默认隐藏 */
-            justify-content: center;
-            align-items: center;
-        }
-        #prank-video {
-            width: 100%;
-            height: 100%;
-        }
-
     </style>
 </head>
 <body>
@@ -207,11 +191,6 @@
         </div>
     </div>
 
-    <!-- 全屏视频播放器容器 -->
-    <div id="video-player-container">
-        <video id="prank-video" controls autoplay></video>
-    </div>
-
     <script>
         // --- 元素获取 ---
         const choiceModal = document.getElementById('choice-modal');
@@ -223,8 +202,9 @@
         const aiCrimeSpan = document.getElementById('ai-crime');
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
-        const videoPlayerContainer = document.getElementById('video-player-container');
-        const prankVideo = document.getElementById('prank-video');
+
+        // --- Bilibili Rickroll 链接 ---
+        const prankVideoUrl = 'https://www.bilibili.com/video/BV1GJ411x7h7/';
 
         // --- 主流程 ---
         window.onload = () => {
@@ -250,15 +230,6 @@
             rejectBtn.style.left = `${newLeft}px`;
         });
         
-        function playFinalVideo() {
-            // ** 你的视频链接已填好 **
-            const videoUrl = "https://raw.githubusercontent.com/AdamsY1/B/main/0617%20(1).mp4";
-            
-            prankVideo.src = videoUrl;
-            videoPlayerContainer.style.display = 'flex';
-            prankVideo.play();
-        }
-
         // --- Gemini AI 功能逻辑 ---
         aiAnalyzeBtn.addEventListener('click', async () => {
             aiAnalyzeBtn.style.display = 'none';
@@ -272,7 +243,10 @@
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
-                    setTimeout(playFinalVideo, 1000);
+                    // 进度条满后1秒跳转
+                    setTimeout(() => {
+                        window.location.href = prankVideoUrl;
+                    }, 1000);
                 }
                 progressBar.style.width = `${progress}%`;
                 progressText.textContent = `系统分析中... ${Math.round(progress)}%`;
@@ -300,6 +274,7 @@
 
             } catch (error) {
                 console.error('Gemini API Error:', error);
+                // 如果API失败，使用一个备用罪行，不影响流程
                 aiCrimeSpan.textContent = '篡改历史教科书把自己的照片换了上去';
             }
         });
