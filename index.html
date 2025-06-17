@@ -2,10 +2,196 @@
 <html lang="zh-CN">
 <head>
     <meta charset="UTF-8">
-    <title>B哥专属网站</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>一个来自B哥的秘密</title>
+    <style>
+        /* --- 全局和背景样式 --- */
+        body, html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden; /* 防止滚动 */
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+            background: #1a1a1a; /* 深色背景 */
+            color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+        }
+
+        /* --- 开场动画文字样式 --- */
+        .intro-text {
+            font-size: 3em;
+            font-weight: 300;
+            letter-spacing: 2px;
+            opacity: 0;
+            animation: fadeIn 3s forwards; /* 渐入动画 */
+        }
+
+        @keyframes fadeIn {
+            to {
+                opacity: 1;
+            }
+        }
+        
+        /* --- 弹窗背景遮罩 --- */
+        .modal-backdrop {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.7); /* 半透明黑色 */
+            backdrop-filter: blur(8px); /* 毛玻璃效果 */
+            display: none; /* 默认隐藏 */
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        /* --- 弹窗容器 --- */
+        .modal-content {
+            padding: 40px;
+            background: #2c2c2c;
+            border-radius: 20px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+            transform: scale(0.9);
+            transition: transform 0.5s ease;
+        }
+
+        .modal-content h2 {
+            margin-top: 0;
+            font-size: 2.5em;
+            font-weight: 600;
+        }
+
+        .modal-content p {
+            font-size: 1.5em;
+            margin-bottom: 40px;
+        }
+
+        /* --- 按钮容器和样式 --- */
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px; /* 按钮间距 */
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            min-width: 150px;
+        }
+
+        #acceptBtn {
+            background-color: #4CAF50; /* 绿色 */
+            color: white;
+        }
+
+        #acceptBtn:hover {
+            background-color: #5cb85c;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(76, 175, 80, 0.4);
+        }
+
+        #rejectBtn {
+            background-color: #f44336; /* 红色 */
+            color: white;
+        }
+
+        #rejectBtn:hover {
+            background-color: #d9534f;
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(244, 67, 54, 0.4);
+        }
+        
+        /* --- "忏悔录"内容区 (默认隐藏) --- */
+        #confessionSection {
+            display: none;
+            /* 在这里添加B哥忏悔录的样式 */
+            background: #fff;
+            color: #333;
+            padding: 50px;
+            border-radius: 10px;
+            max-width: 800px;
+            text-align: left;
+        }
+    </style>
 </head>
 <body>
-    <h1>网站施工中... B哥请期待！</h1>
-    <p>技术测试页面</p>
+
+    <!-- 开场文字 -->
+    <div id="introSection">
+        <h1 class="intro-text">有些事... 是时候说清楚了。</h1>
+    </div>
+
+    <!-- 弹窗 -->
+    <div id="modal" class="modal-backdrop">
+        <div class="modal-content">
+            <h2>一个重要的决定</h2>
+            <p>你，是否愿意接受B哥的忏悔？</p>
+            <div class="button-container">
+                <button id="acceptBtn" class="btn">欣然接受</button>
+                <button id="rejectBtn" class="btn">我偏不</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- "下一步"的内容，也就是B哥的忏悔录 -->
+    <div id="confessionSection">
+        <h1>B哥忏悔录</h1>
+        <p>这里是下一步的内容。请在这里放入B哥的图片和“罪行”描述。</p>
+        <!-- 例如: -->
+        <!-- 
+        <h2>罪行一：打游戏太菜</h2>
+        <img src="你的图片链接" alt="B哥打游戏的丑态" style="width:100%; border-radius:10px;">
+        <p>B哥，你看看你，天天打游戏还那么菜，严重影响了我的游戏体验！</p>
+        -->
+    </div>
+
+
+    <script>
+        // 获取所有需要的元素
+        const introSection = document.getElementById('introSection');
+        const modal = document.getElementById('modal');
+        const modalContent = document.querySelector('.modal-content');
+        const acceptBtn = document.getElementById('acceptBtn');
+        const rejectBtn = document.getElementById('rejectBtn');
+        const confessionSection = document.getElementById('confessionSection');
+
+        // 1. 页面加载3秒后，显示弹窗
+        setTimeout(() => {
+            modal.style.display = 'flex'; // 显示遮罩
+            setTimeout(() => { // 短暂延迟后增加动画效果
+                modal.style.opacity = '1';
+                modalContent.style.transform = 'scale(1)';
+            }, 50);
+        }, 3000); // 3000毫秒 = 3秒
+
+        // 2. 为"接受"按钮添加点击事件
+        acceptBtn.addEventListener('click', () => {
+            // 隐藏开场文字和弹窗
+            introSection.style.display = 'none';
+            modal.style.display = 'none';
+            // 显示忏悔录内容
+            confessionSection.style.display = 'block';
+        });
+
+        // 3. 为"不接受"按钮添加点击事件
+        rejectBtn.addEventListener('click', () => {
+            alert('你他妈必须接受'); // 弹出警告
+            // 不做任何其他事，用户只能关闭警告框，然后重新选择
+        });
+
+    </script>
+
 </body>
 </html>
