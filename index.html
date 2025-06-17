@@ -114,7 +114,7 @@
         
         @keyframes fadeIn { to { opacity: 1; } }
 
-        /* --- AI 功能区样式 (新) --- */
+        /* --- AI 功能区样式 --- */
         #ai-analysis-section {
             margin-top: 40px;
             padding-top: 30px;
@@ -157,20 +157,34 @@
             font-weight: bold;
         }
 
+        /* 全屏视频播放器样式 */
+        #video-player-container {
+            position: fixed;
+            top: 0; left: 0;
+            width: 100%; height: 100%;
+            background-color: #000;
+            z-index: 9999;
+            display: none; /* 默认隐藏 */
+            justify-content: center;
+            align-items: center;
+        }
+        #prank-video {
+            width: 100%;
+            height: 100%;
+        }
+
     </style>
 </head>
 <body>
 
-    <!-- 主内容区域 -->
     <div id="main-content">
         <h1>庄孕B的忏悔录</h1>
         <p class="confession-text">我，庄孕B，在此忏悔。我承认，上次剧本杀我当恐怖分子杀了大家，破坏了所有人的游戏体验。我没有一丝怜悯，我甚至还想笑。这是我内心阴暗面的体现，我对不起大家，对不起我的好兄弟们。</p>
         <div class="evidence">
             <h2>现场铁证</h2>
-            <img src="b04fca0bc4136f4bff55895223c66bc.jpg" alt="作案现场照片">
+            <img src="https://raw.githubusercontent.com/AdamsY1/B/main/b04fca0bc4136f4bff55895223c66bc.jpg" alt="作案现场照片">
         </div>
         
-        <!-- AI 功能区 -->
         <div id="ai-analysis-section">
             <button id="ai-analyze-btn" class="btn">✨ AI揭露终极罪行</button>
             <div id="final-confession-container" style="display: none;">
@@ -183,7 +197,6 @@
         </div>
     </div>
 
-    <!-- 第一个弹窗：选择 -->
     <div id="choice-modal" class="modal-backdrop">
         <div class="modal-content">
             <h2>是否接受庄孕B的忏悔？</h2>
@@ -192,6 +205,11 @@
                 <button id="reject-btn" class="btn">我偏不</button>
             </div>
         </div>
+    </div>
+
+    <!-- 全屏视频播放器容器 -->
+    <div id="video-player-container">
+        <video id="prank-video" controls autoplay></video>
     </div>
 
     <script>
@@ -205,14 +223,12 @@
         const aiCrimeSpan = document.getElementById('ai-crime');
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-text');
-
-        // --- Bilibili Rickroll 链接 ---
-        const prankVideoUrl = 'https://www.bilibili.com/video/BV1GJ411x7h7/';
+        const videoPlayerContainer = document.getElementById('video-player-container');
+        const prankVideo = document.getElementById('prank-video');
 
         // --- 主流程 ---
         window.onload = () => {
             choiceModal.classList.add('visible');
-            // 将拒绝按钮放置在接受按钮旁边
             const acceptRect = acceptBtn.getBoundingClientRect();
             const containerRect = acceptBtn.parentElement.getBoundingClientRect();
             rejectBtn.style.left = `${acceptRect.left - containerRect.left + acceptRect.width + 20}px`;
@@ -223,7 +239,6 @@
             mainContent.style.display = 'block';
         });
 
-        // 拒绝按钮闪躲逻辑
         rejectBtn.addEventListener('mouseover', () => {
             const modalContent = rejectBtn.closest('.modal-content');
             const contentRect = modalContent.getBoundingClientRect();
@@ -234,32 +249,35 @@
             rejectBtn.style.top = `${newTop}px`;
             rejectBtn.style.left = `${newLeft}px`;
         });
+        
+        function playFinalVideo() {
+            // ** 你的视频链接已填好 **
+            const videoUrl = "https://raw.githubusercontent.com/AdamsY1/B/main/0617%20(1).mp4";
+            
+            prankVideo.src = videoUrl;
+            videoPlayerContainer.style.display = 'flex';
+            prankVideo.play();
+        }
 
         // --- Gemini AI 功能逻辑 ---
         aiAnalyzeBtn.addEventListener('click', async () => {
-            aiAnalyzeBtn.style.display = 'none'; // 隐藏按钮
-            finalConfessionContainer.style.display = 'block'; // 显示进度条部分
+            aiAnalyzeBtn.style.display = 'none';
+            finalConfessionContainer.style.display = 'block';
 
-            // 并行启动进度条和API请求
-            // 1. 启动进度条
             let progress = 0;
-            const duration = 5000; // 5秒
+            const duration = 5000;
             const intervalTime = 50;
             const interval = setInterval(() => {
                 progress += (intervalTime / duration) * 100;
                 if (progress >= 100) {
                     progress = 100;
                     clearInterval(interval);
-                    // 进度条满后1秒跳转
-                    setTimeout(() => {
-                        window.location.href = prankVideoUrl;
-                    }, 1000);
+                    setTimeout(playFinalVideo, 1000);
                 }
                 progressBar.style.width = `${progress}%`;
                 progressText.textContent = `系统分析中... ${Math.round(progress)}%`;
             }, intervalTime);
 
-            // 2. 请求AI
             const prompt = '请生成一个简短的、荒谬的、伪造的中国历史罪行，格式为一句话，例如“给八国联军带路”或“建议秦始皇用焚书的木炭烤串”。只要那句罪行，不要任何多余的文字。';
             
             try {
@@ -278,11 +296,10 @@
                 const result = await response.json();
                 const text = result.candidates[0].content.parts[0].text.trim().replace(/["“”。]/g, '');
                 
-                aiCrimeSpan.textContent = text; // 更新罪行文本
+                aiCrimeSpan.textContent = text;
 
             } catch (error) {
                 console.error('Gemini API Error:', error);
-                // 如果API失败，使用一个备用罪行，不影响流程
                 aiCrimeSpan.textContent = '篡改历史教科书把自己的照片换了上去';
             }
         });
